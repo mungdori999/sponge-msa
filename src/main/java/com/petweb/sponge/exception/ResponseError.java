@@ -5,11 +5,11 @@ import lombok.Getter;
 @Getter
 public class ResponseError {
 
-    private int resCode;
-    private String resMsg;
+    private int code;
+    private String message;
 
-    public ResponseError(int resCode, String resMsg) {
-        this.resCode = resCode;
-        this.resMsg = resMsg;
+    public ResponseError(int code, String message) {
+        this.code = code;
+        this.message = message;
     }
 }

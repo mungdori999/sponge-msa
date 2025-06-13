@@ -2,7 +2,7 @@ package com.petweb.sponge.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.petweb.sponge.exception.ResponseError;
-import com.petweb.sponge.utils.ResponseHttpStatus;
+import com.petweb.sponge.exception.TokenHttpStatus;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.FilterChain;
@@ -88,7 +88,7 @@ public class LogoutJwtFilter extends GenericFilterBean {
             return true;
         } catch (ExpiredJwtException e) {
             log.error("토큰 만료: {}", e.getMessage());
-            respondWithError(response, ResponseHttpStatus.EXPIRE_ACCESS_TOKEN.getCode(), "토큰이 만료되었습니다.");
+            respondWithError(response, TokenHttpStatus.EXPIRE_ACCESS_TOKEN.getCode(), "토큰이 만료되었습니다.");
         } catch (SignatureException e) {
             log.error("토큰 위조: {}", e.getMessage());
             respondWithError(response, 401, "위조된 토큰입니다.");

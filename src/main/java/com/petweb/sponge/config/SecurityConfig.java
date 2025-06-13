@@ -42,7 +42,7 @@ public class SecurityConfig {
 
         //JWTFilter 추가
         http
-                .addFilterBefore(new JwtFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new LogoutJwtFilter(jwtUtil, refreshRepository), LogoutFilter.class);
         //경로별 인가 작업
         http

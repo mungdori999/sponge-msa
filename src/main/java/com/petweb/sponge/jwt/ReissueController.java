@@ -1,7 +1,6 @@
 package com.petweb.sponge.jwt;
 
 import com.petweb.sponge.exception.ResponseError;
-import com.petweb.sponge.utils.ResponseHttpStatus;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -10,6 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import static com.petweb.sponge.exception.TokenHttpStatus.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,7 +27,7 @@ public class ReissueController {
         //토큰이 존재하지 않는다면
         if (!refreshRepository.existsByRefresh(refreshToken)) {
             return new ResponseEntity<>(
-                    new ResponseError(ResponseHttpStatus.EXPIRE_REFRESH_TOKEN.getCode(), "토큰이 만료되었습니다."),
+                    new ResponseError(EXPIRE_REFRESH_TOKEN.getCode(), EXPIRE_REFRESH_TOKEN.getMessage()),
                     HttpStatus.UNAUTHORIZED);
         }
         try {
@@ -34,13 +35,13 @@ public class ReissueController {
         } catch (ExpiredJwtException e) {
             refreshRepository.deleteByRefresh(refreshToken);
             return new ResponseEntity<>(
-                    new ResponseError(ResponseHttpStatus.EXPIRE_REFRESH_TOKEN.getCode(), "토큰이 만료되었습니다."),
+                    new ResponseError(EXPIRE_REFRESH_TOKEN.getCode(), EXPIRE_REFRESH_TOKEN.getMessage()),
                     HttpStatus.UNAUTHORIZED);
         }
         String category = jwtUtil.getCategory(refreshToken);
         if (!category.equals("refreshToken")) {
             return new ResponseEntity<>(
-                    new ResponseError(ResponseHttpStatus.EXPIRE_REFRESH_TOKEN.getCode(), "토큰이 만료되었습니다."),
+                    new ResponseError(EXPIRE_REFRESH_TOKEN.getCode(), "토큰이 만료되었습니다."),
                     HttpStatus.UNAUTHORIZED);
         }
         Long id = jwtUtil.getId(refreshToken);
