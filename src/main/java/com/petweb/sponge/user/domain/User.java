@@ -1,5 +1,6 @@
 package com.petweb.sponge.user.domain;
 
+import com.petweb.sponge.user.dto.UserCreate;
 import com.petweb.sponge.user.dto.UserUpdate;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,6 +24,12 @@ public class User {
         this.createdAt = createdAt;
     }
 
+    public static User from(UserCreate userCreate) {
+        return User.builder()
+                .email(userCreate.getEmail())
+                .name(userCreate.getName())
+                .build();
+    }
     public User update(UserUpdate userUpdate) {
         return User.builder()
                 .id(id)

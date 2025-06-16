@@ -8,6 +8,7 @@ import com.petweb.sponge.jwt.Token;
 import com.petweb.sponge.log.Logging;
 import com.petweb.sponge.user.controller.response.UserResponse;
 import com.petweb.sponge.user.domain.User;
+import com.petweb.sponge.user.dto.UserCreate;
 import com.petweb.sponge.user.dto.UserUpdate;
 import com.petweb.sponge.user.service.UserService;
 import com.petweb.sponge.utils.AuthorizationUtil;
@@ -42,6 +43,18 @@ public class UserController {
     }
 
     /**
+     * email로 유저 단건조회
+     * @param email
+     * @return
+     */
+    @GetMapping()
+    public ResponseEntity<UserResponse> getByEmail(@RequestParam("email")String email) {
+        User user = userService.getByEmail(email);
+        return new ResponseEntity<>(UserResponse.from(user), HttpStatus.OK);
+    }
+
+
+    /**
      * 자신의 계정정보를 불러옴
      *
      * @return
@@ -72,6 +85,18 @@ public class UserController {
             throw new LoginIdError();
         }
     }
+
+    /**
+     * 유저 회원가입
+     * @param userCreate
+     * @return
+     */
+    @PostMapping()
+    public ResponseEntity<UserResponse> save(@RequestBody UserCreate userCreate) {
+        User user = userService.save(userCreate);
+        return new ResponseEntity<>(UserResponse.from(user), HttpStatus.OK);
+    }
+
 
     /**
      * 회원탈퇴

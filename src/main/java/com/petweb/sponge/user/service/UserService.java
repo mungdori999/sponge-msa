@@ -4,6 +4,7 @@ import com.petweb.sponge.exception.error.NotFoundUser;
 import com.petweb.sponge.post.repository.post.BookmarkRepository;
 import com.petweb.sponge.post.repository.post.PostRepository;
 import com.petweb.sponge.user.domain.User;
+import com.petweb.sponge.user.dto.UserCreate;
 import com.petweb.sponge.user.dto.UserUpdate;
 import com.petweb.sponge.user.repository.UserRepository;
 import lombok.Builder;
@@ -31,6 +32,16 @@ public class UserService {
     public User getById(Long id) {
         // user,address 한번에 조회
         return userRepository.findById(id).orElseThrow(
+                NotFoundUser::new);
+    }
+
+    /**
+     * 유저 이메일로 단건 조회
+     * @param email
+     */
+    @Transactional(readOnly = true)
+    public User getByEmail(String email) {
+        return userRepository.findByEmail(email).orElseThrow(
                 NotFoundUser::new);
     }
 
@@ -63,6 +74,12 @@ public class UserService {
         return user;
     }
 
+    @Transactional
+    public User save(UserCreate userCreate) {
+        User user = User.from(userCreate);
+        return userRepository.save(user);
+    }
+
     /**
      * 유저 정보 삭제
      *
@@ -74,6 +91,5 @@ public class UserService {
                 NotFoundUser::new);
         userRepository.delete(user);
     }
-
 
 }
