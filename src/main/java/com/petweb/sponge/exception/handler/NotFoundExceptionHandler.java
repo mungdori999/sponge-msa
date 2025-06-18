@@ -15,7 +15,7 @@ public class NotFoundExceptionHandler {
 
     @ExceptionHandler({NotFoundUser.class, NotFoundTrainer.class})
     public ResponseEntity<ResponseError> handleNotFoundAccountException() {
-        return new ResponseEntity<>(new ResponseError(NOT_FOUND_ACCOUNT.getCode(), NOT_FOUND_ACCOUNT.getMessage()), HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(new ResponseError(NOT_FOUND_ACCOUNT.getCode(), NOT_FOUND_ACCOUNT.getMessage()), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler({NotFoundPet.class, NotFoundAnswer.class, NotFoundPost.class})

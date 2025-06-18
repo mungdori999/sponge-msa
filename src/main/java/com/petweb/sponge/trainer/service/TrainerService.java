@@ -32,6 +32,17 @@ public class TrainerService {
     }
 
     /**
+     * email로 훈련사 조회
+     * @param email
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public Trainer getByEmail(String email) {
+        return trainerRepository.findByEmail(email).orElseThrow(
+                NotFoundTrainer::new);
+    }
+
+    /**
      * 내정보 조회
      *
      * @param loginId

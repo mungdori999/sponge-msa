@@ -1,7 +1,6 @@
 package com.petweb.sponge.chat;
 
 import com.petweb.sponge.exception.error.NotFoundToken;
-import com.petweb.sponge.jwt.JwtUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +18,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class StompHandler implements ChannelInterceptor {
 
-    private final JwtUtil jwtUtil;
+//    private final JwtUtil jwtUtil;
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
@@ -29,12 +28,12 @@ public class StompHandler implements ChannelInterceptor {
             if (!this.validateAccessToken(accessToken)) {
                 throw new NotFoundToken();
             }
-            Long id = jwtUtil.getId(accessToken);
-            String loginType = jwtUtil.getLoginType(accessToken);
+//            Long id = jwtUtil.getId(accessToken);
+//            String loginType = jwtUtil.getLoginType(accessToken);
 
             // 헤더에 사용자 정보 추가
-            accessor.setNativeHeader("id", String.valueOf(id));
-            accessor.setNativeHeader("loginType", loginType);
+//            accessor.setNativeHeader("id", String.valueOf(id));
+//            accessor.setNativeHeader("loginType", loginType);
         }
 
 
@@ -48,7 +47,7 @@ public class StompHandler implements ChannelInterceptor {
         }
         String token = accessToken.trim();
         try {
-            jwtUtil.isExpired(token);
+//            jwtUtil.isExpired(token);
             return true;
         } catch (ExpiredJwtException | SignatureException e) {
             log.error("토큰 검증 실패: {}", e.getMessage());

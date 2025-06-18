@@ -2,12 +2,7 @@ package com.petweb.sponge.trainer.controller;
 
 import com.petweb.sponge.auth.TrainerAuth;
 import com.petweb.sponge.exception.error.LoginIdError;
-import com.petweb.sponge.jwt.JwtUtil;
-import com.petweb.sponge.jwt.RefreshRepository;
-import com.petweb.sponge.jwt.RefreshToken;
-import com.petweb.sponge.jwt.Token;
 import com.petweb.sponge.log.Logging;
-import com.petweb.sponge.oauth2.controller.response.TrainerOauth2Response;
 import com.petweb.sponge.trainer.controller.response.TrainerResponse;
 import com.petweb.sponge.trainer.domain.Trainer;
 import com.petweb.sponge.trainer.dto.TrainerCreate;
@@ -32,8 +27,6 @@ public class TrainerController {
 
     private final TrainerService trainerService;
     private final AuthorizationUtil authorizationUtil;
-    private final JwtUtil jwtUtil;
-    private final RefreshRepository refreshRepository;
 
     /**
      * 훈련사 단건조회
@@ -44,6 +37,17 @@ public class TrainerController {
     @GetMapping("/{id}")
     public ResponseEntity<TrainerResponse> getById(@PathVariable("id") Long id) {
         Trainer trainer = trainerService.getById(id);
+        return new ResponseEntity<>(TrainerResponse.from(trainer), HttpStatus.OK);
+    }
+
+    /**
+     * 이메일로 조회
+     * @param email
+     * @return
+     */
+    @GetMapping()
+    public ResponseEntity<TrainerResponse> getByEmail(@RequestParam("email") String email) {
+        Trainer trainer = trainerService.getByEmail(email);
         return new ResponseEntity<>(TrainerResponse.from(trainer), HttpStatus.OK);
     }
 
@@ -66,12 +70,9 @@ public class TrainerController {
      * @return
      */
     @PostMapping()
-    public ResponseEntity<TrainerOauth2Response> create(@RequestBody TrainerCreate trainerCreate) {
+    public ResponseEntity<TrainerResponse> create(@RequestBody TrainerCreate trainerCreate) {
         Trainer trainer = trainerService.create(trainerCreate);
-        Token token = jwtUtil.createToken(trainer.getId(), trainer.getName(), LoginType.TRAINER.getLoginType());
-        refreshRepository.save(token.getRefreshToken());
-        return ResponseEntity.ok().header("Authorization", token.getAccessToken())
-                .body(TrainerOauth2Response.login(trainer, true, token.getRefreshToken()));
+        return new ResponseEntity<>(TrainerResponse.from(trainer),HttpStatus.OK);
     }
 
     /**
@@ -79,18 +80,18 @@ public class TrainerController {
      *
      * @param id
      */
-    @PatchMapping("/{id}")
-    @TrainerAuth
-    public ResponseEntity<RefreshToken> update(@PathVariable("id") Long id, @RequestBody TrainerUpdate trainerUpdate) {
-        if (authorizationUtil.getLoginId().equals(id)) {
-            Trainer trainer = trainerService.update(id, trainerUpdate);
-            Token token = jwtUtil.createToken(trainer.getId(), trainer.getName(), LoginType.TRAINER.getLoginType());
-            return ResponseEntity.ok().header("Authorization", token.getAccessToken())
-                    .body(new RefreshToken(token.getRefreshToken()));
-        } else {
-            throw new LoginIdError();
-        }
-    }
+//    @PatchMapping("/{id}")
+//    @TrainerAuth
+//    public ResponseEntity<RefreshToken> update(@PathVariable("id") Long id, @RequestBody TrainerUpdate trainerUpdate) {
+//        if (authorizationUtil.getLoginId().equals(id)) {
+//            Trainer trainer = trainerService.update(id, trainerUpdate);
+//            Token token = jwtUtil.createToken(trainer.getId(), trainer.getName(), LoginType.TRAINER.getLoginType());
+//            return ResponseEntity.ok().header("Authorization", token.getAccessToken())
+//                    .body(new RefreshToken(token.getRefreshToken()));
+//        } else {
+//            throw new LoginIdError();
+//        }
+//    }
 
     /**
      * 회원탈퇴

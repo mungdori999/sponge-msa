@@ -1,9 +1,6 @@
 package com.petweb.sponge.config;
 
-import com.petweb.sponge.jwt.JwtFilter;
-import com.petweb.sponge.jwt.JwtUtil;
-import com.petweb.sponge.jwt.LogoutJwtFilter;
-import com.petweb.sponge.jwt.RefreshRepository;
+import com.petweb.sponge.auth.AuthorizationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,18 +8,14 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.logout.LogoutFilter;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtUtil jwtUtil;
-    private final RefreshRepository refreshRepository;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -42,18 +35,15 @@ public class SecurityConfig {
 
         //JWTFilter 추가
         http
-                .addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new LogoutJwtFilter(jwtUtil, refreshRepository), LogoutFilter.class);
+                .addFilterBefore(new AuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
         //경로별 인가 작업
         http
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers(HttpMethod.GET, "/api/**")
                         .permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/**")
+                        .requestMatchers(HttpMethod.POST, "/api/user")
                         .permitAll()
-                        .requestMatchers(HttpMethod.PATCH, "/api/**")
-                        .permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/api/**")
+                        .requestMatchers(HttpMethod.POST, "/api/trainer")
                         .permitAll()
                         .anyRequest()
                         .authenticated()
