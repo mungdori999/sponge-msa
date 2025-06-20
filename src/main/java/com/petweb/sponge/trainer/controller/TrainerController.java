@@ -42,6 +42,7 @@ public class TrainerController {
 
     /**
      * 이메일로 조회
+     *
      * @param email
      * @return
      */
@@ -72,7 +73,7 @@ public class TrainerController {
     @PostMapping()
     public ResponseEntity<TrainerResponse> create(@RequestBody TrainerCreate trainerCreate) {
         Trainer trainer = trainerService.create(trainerCreate);
-        return new ResponseEntity<>(TrainerResponse.from(trainer),HttpStatus.OK);
+        return new ResponseEntity<>(TrainerResponse.from(trainer), HttpStatus.OK);
     }
 
     /**
@@ -80,18 +81,11 @@ public class TrainerController {
      *
      * @param id
      */
-//    @PatchMapping("/{id}")
-//    @TrainerAuth
-//    public ResponseEntity<RefreshToken> update(@PathVariable("id") Long id, @RequestBody TrainerUpdate trainerUpdate) {
-//        if (authorizationUtil.getLoginId().equals(id)) {
-//            Trainer trainer = trainerService.update(id, trainerUpdate);
-//            Token token = jwtUtil.createToken(trainer.getId(), trainer.getName(), LoginType.TRAINER.getLoginType());
-//            return ResponseEntity.ok().header("Authorization", token.getAccessToken())
-//                    .body(new RefreshToken(token.getRefreshToken()));
-//        } else {
-//            throw new LoginIdError();
-//        }
-//    }
+    @PatchMapping("/{id}")
+    public ResponseEntity<TrainerResponse> update(@PathVariable("id") Long id, @RequestBody TrainerUpdate trainerUpdate) {
+        Trainer trainer = trainerService.update(id, trainerUpdate);
+        return new ResponseEntity<>(TrainerResponse.from(trainer), HttpStatus.OK);
+    }
 
     /**
      * 회원탈퇴

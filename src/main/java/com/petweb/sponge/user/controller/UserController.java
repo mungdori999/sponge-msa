@@ -40,11 +40,12 @@ public class UserController {
 
     /**
      * email로 유저 단건조회
+     *
      * @param email
      * @return
      */
     @GetMapping()
-    public ResponseEntity<UserResponse> getByEmail(@RequestParam("email")String email) {
+    public ResponseEntity<UserResponse> getByEmail(@RequestParam("email") String email) {
         User user = userService.getByEmail(email);
         return new ResponseEntity<>(UserResponse.from(user), HttpStatus.OK);
     }
@@ -62,6 +63,17 @@ public class UserController {
         return new ResponseEntity<>(UserResponse.from(user), HttpStatus.OK);
     }
 
+    /**
+     * 유저 회원가입
+     *
+     * @param userCreate
+     * @return
+     */
+    @PostMapping
+    public ResponseEntity<UserResponse> save(@RequestBody UserCreate userCreate) {
+        User user = userService.save(userCreate);
+        return new ResponseEntity<>(UserResponse.from(user), HttpStatus.OK);
+    }
 
     /**
      * 유저 정보 수정
@@ -69,27 +81,9 @@ public class UserController {
      * @param id
      * @return
      */
-//    @PatchMapping("/{id}")
-//    @UserAuth
-//    public ResponseEntity<RefreshToken> update(@PathVariable("id") Long id, @RequestBody UserUpdate userUpdate) {
-//        if (authorizationUtil.getLoginId().equals(id)) {
-//            User user = userService.update(id, userUpdate);
-//            Token token = jwtUtil.createToken(user.getId(), user.getName(), LoginType.USER.getLoginType());
-//            return ResponseEntity.ok().header("Authorization", token.getAccessToken())
-//                    .body(new RefreshToken(token.getRefreshToken()));
-//        } else {
-//            throw new LoginIdError();
-//        }
-//    }
-
-    /**
-     * 유저 회원가입
-     * @param userCreate
-     * @return
-     */
-    @PostMapping
-    public ResponseEntity<UserResponse> save(@RequestBody UserCreate userCreate) {
-        User user = userService.save(userCreate);
+    @PatchMapping("/{id}")
+    public ResponseEntity<UserResponse> update(@PathVariable("id") Long id, @RequestBody UserUpdate userUpdate) {
+        User user = userService.update(id, userUpdate);
         return new ResponseEntity<>(UserResponse.from(user), HttpStatus.OK);
     }
 

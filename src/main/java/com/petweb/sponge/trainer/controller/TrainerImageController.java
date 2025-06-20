@@ -51,7 +51,7 @@ public class TrainerImageController {
      * @param trainerId
      * @param imgUrl
      */
-    @DeleteMapping("")
+    @DeleteMapping()
     @TrainerAuth
     public void deleteTrainerImg(@RequestParam("trainerId") Long trainerId, @RequestParam("imgUrl") String imgUrl) {
         if (authorizationUtil.getLoginId().equals(trainerId)) {
