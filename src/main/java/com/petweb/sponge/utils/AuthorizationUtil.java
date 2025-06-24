@@ -1,6 +1,6 @@
 package com.petweb.sponge.utils;
 
-import com.petweb.sponge.oauth2.dto.CustomOAuth2User;
+import com.petweb.sponge.oauth2.dto.CustomUser;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,7 +14,7 @@ public class AuthorizationUtil {
         if (authentication.getClass() == AnonymousAuthenticationToken.class) {
             return null;
         }
-        CustomOAuth2User userDetails = (CustomOAuth2User) authentication.getPrincipal();
+        CustomUser userDetails = (CustomUser) authentication.getPrincipal();
 
         return userDetails.getId();
     }
@@ -24,7 +24,7 @@ public class AuthorizationUtil {
         if (authentication.getClass() == AnonymousAuthenticationToken.class) {
             return null;
         }
-        CustomOAuth2User userDetails = (CustomOAuth2User) authentication.getPrincipal();
+        CustomUser userDetails = (CustomUser) authentication.getPrincipal();
         return userDetails.getLoginType();
     }
 

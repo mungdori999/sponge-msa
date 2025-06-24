@@ -1,8 +1,6 @@
 package com.petweb.sponge.chat;
 
 import com.petweb.sponge.exception.error.NotFoundToken;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.Message;
@@ -46,13 +44,14 @@ public class StompHandler implements ChannelInterceptor {
             return false;
         }
         String token = accessToken.trim();
-        try {
-//            jwtUtil.isExpired(token);
-            return true;
-        } catch (ExpiredJwtException | SignatureException e) {
-            log.error("토큰 검증 실패: {}", e.getMessage());
-            return false;
-        }
+//        try {
+////            jwtUtil.isExpired(token);
+//            return true;
+//        } catch (ExpiredJwtException | SignatureException e) {
+//            log.error("토큰 검증 실패: {}", e.getMessage());
+//            return false;
+//        }
+//    }
+        return false;
     }
-
 }

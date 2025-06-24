@@ -1,6 +1,6 @@
 package com.petweb.sponge.auth;
 
-import com.petweb.sponge.oauth2.dto.CustomOAuth2User;
+import com.petweb.sponge.oauth2.dto.CustomUser;
 import com.petweb.sponge.oauth2.dto.LoginAuth;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -31,7 +31,7 @@ public class AuthorizationFilter extends OncePerRequestFilter {
                     .id(id)
                     .loginType(loginType)
                     .build();
-            CustomOAuth2User user = new CustomOAuth2User(loginAuth);
+            CustomUser user = new CustomUser(loginAuth);
             Authentication authToken
                     = new UsernamePasswordAuthenticationToken(user, null, List.of(new SimpleGrantedAuthority("ROLE_USER")));
             SecurityContextHolder.getContext().setAuthentication(authToken);
