@@ -1,6 +1,6 @@
 package com.petweb.sponge.utils;
 
-import com.petweb.sponge.oauth2.dto.CustomUser;
+import com.petweb.sponge.auth.CustomUser;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

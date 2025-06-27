@@ -9,13 +9,15 @@ import com.petweb.sponge.user.dto.UserCreate;
 import com.petweb.sponge.user.dto.UserUpdate;
 import com.petweb.sponge.user.service.UserService;
 import com.petweb.sponge.utils.AuthorizationUtil;
-import com.petweb.sponge.utils.LoginType;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -50,6 +52,18 @@ public class UserController {
         return new ResponseEntity<>(UserResponse.from(user), HttpStatus.OK);
     }
 
+    /**
+     * user 전체조회
+     *
+     * @param idList
+     * @return
+     */
+    @GetMapping("/list")
+    public ResponseEntity<List<UserResponse>> getListByIdList(@RequestParam("idList") List<Long> idList) {
+        List<User> userList = userService.getListByIdList(idList);
+        return new ResponseEntity<>(userList.stream().map(UserResponse::from).collect(Collectors.toList())
+                , HttpStatus.OK);
+    }
 
     /**
      * 자신의 계정정보를 불러옴

@@ -54,10 +54,6 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok'
 
 
-    //WebSocket
-    implementation 'org.springframework.boot:spring-boot-starter-websocket'
-
-
     // JSON 변환 (메시지 처리에 필요)
     implementation 'com.fasterxml.jackson.core:jackson-databind'
 

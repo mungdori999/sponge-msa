@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Builder
@@ -40,6 +42,11 @@ public class TrainerService {
     public Trainer getByEmail(String email) {
         return trainerRepository.findByEmail(email).orElseThrow(
                 NotFoundTrainer::new);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Trainer> getListByIdList(List<Long> idList) {
+        return trainerRepository.findShortByIdList(idList);
     }
 
     /**

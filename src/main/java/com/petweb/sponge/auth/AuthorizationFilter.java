@@ -1,7 +1,5 @@
 package com.petweb.sponge.auth;
 
-import com.petweb.sponge.oauth2.dto.CustomUser;
-import com.petweb.sponge.oauth2.dto.LoginAuth;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

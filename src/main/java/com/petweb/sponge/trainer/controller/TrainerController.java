@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -50,6 +51,19 @@ public class TrainerController {
     public ResponseEntity<TrainerResponse> getByEmail(@RequestParam("email") String email) {
         Trainer trainer = trainerService.getByEmail(email);
         return new ResponseEntity<>(TrainerResponse.from(trainer), HttpStatus.OK);
+    }
+
+    /**
+     * trainer 전체조회
+     *
+     * @param idList
+     * @return
+     */
+    @GetMapping("/list")
+    public ResponseEntity<List<TrainerResponse>> getListByIdList(@RequestParam("idList") List<Long> idList) {
+        List<Trainer> trainerList = trainerService.getListByIdList(idList);
+        return new ResponseEntity<>(trainerList.stream().map(TrainerResponse::from).collect(Collectors.toList())
+                , HttpStatus.OK);
     }
 
     /**

@@ -1,4 +1,4 @@
-package com.petweb.sponge.oauth2.dto;
+package com.petweb.sponge.auth;
 
 
 
